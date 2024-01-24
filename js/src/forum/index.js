@@ -16,9 +16,10 @@ import Page from "flarum/common/components/Page";
 
 app.initializers.add('justoverclock/header-slideshow', () => {
     extend(IndexPage.prototype, 'view', function (vdom) {
-        if (vdom.children && vdom.children.splice) {
-
-            const ImageOne = app.forum.attribute('ImageOne');
+        // 检查是否为首页
+        if (window.location.pathname === '/' || window.location.pathname === '') {
+            if (vdom.children && vdom.children.splice) {
+                const ImageOne = app.forum.attribute('ImageOne');
             const ImageTwo = app.forum.attribute('ImageTwo');
             const ImageThree = app.forum.attribute('ImageThree');
             const LinkOne = app.forum.attribute('LinkOne');
@@ -64,18 +65,25 @@ app.initializers.add('justoverclock/header-slideshow', () => {
                 ]),
                 m('div', { className: 'carousel__controls' }),
             ]);
-            vdom.children.splice(0, 0, insert);
+                vdom.children.splice(0, 0, insert); // 将 Carousel 添加到页面上
+            }
         }
     });
-});
-extend(IndexPage.prototype, 'oncreate', function (vnode) {
-    const welcomeHero = document.getElementsByClassName('Hero WelcomeHero');
-    new Carousel(document.querySelector('.carousel'), app.forum.attribute('TransitionTime') * 1000) || 5000;
-    // nascondiamo la welcome hero nella pagina principale
-    if (app.current.matches(IndexPage)) {
-        for (var i = 0; i < welcomeHero.length; i++) {
-            welcomeHero[i].style.display = 'none';
-        }
-    }
-});
 
+    extend(IndexPage.prototype, 'oncreate', function (vnode) {
+        const welcomeHero = document.getElementsByClassName('Hero WelcomeHero');
+        new Carousel(document.querySelector('.carousel'), app.forum.attribute('TransitionTime') * 1000) || 5000;
+        // nascondiamo la welcome hero nella pagina principale
+        if (app.current.matches(IndexPage)) {
+            for (var i = 0; i < welcomeHero.length; i++) {
+                welcomeHero[i].style.display = 'none';
+            }
+        }
+
+        // 添加一个事件监听器来阻止在轮播图区域的上下滑动
+        const carousel = document.querySelector('.carousel');
+        carousel.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+    });
+});
