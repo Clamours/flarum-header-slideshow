@@ -4,6 +4,7 @@
 
 A [Flarum](http://flarum.org) extension. Modified from justoverclock/header-slideshow for my own needs.
 
+![WX20240124-205247@2x](https://github.com/Clamours/flarum-header-slideshow/assets/60908461/84ced59e-808c-49d9-84d6-028d97d016a8)
 
 
 ### Modification
